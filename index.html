@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nos casamos — Rocío & José</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" href="img/logo.png" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --beige-light:#F4EEDF;
+    --beige:#E6DAB8;
+    --beige-deep:#B9A26D;
+    --black:#191510;
+    --ink:#3C362C;
+    --white:#FFFFFF;
+    --line:rgba(25,21,16,0.14);
+    --shadow:0 20px 50px rgba(25,21,16,0.10);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--beige-light);
+    color:var(--ink);
+    font-family:'Jost',sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:500;
+    color:var(--black);
+    letter-spacing:0.01em;
+  }
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:0.28em;
+    font-size:0.72rem;
+    color:var(--beige-deep);
+    font-weight:500;
+  }
+  a{color:inherit;}
+  button{font-family:'Jost',sans-serif;cursor:pointer;}
+  ::selection{background:var(--beige-deep);color:var(--white);}
+
+  /* ---------- LOGIN GATE ---------- */
+  #gate{
+    position:fixed;inset:0;
+    background:var(--black);
+    display:flex;align-items:center;justify-content:center;
+    z-index:100;
+    padding:24px;
+    transition:opacity 0.7s ease, visibility 0.7s ease;
+  }
+  #gate.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  .gate-card{
+    background:var(--beige-light);
+    max-width:380px;width:100%;
+    padding:46px 36px 38px;
+    text-align:center;
+    border:1px solid var(--line);
+    position:relative;
+  }
+  .gate-amp{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:3rem;
+    color:var(--beige-deep);
+    line-height:1;
+    margin-bottom:6px;
+  }
+  .gate-card h1{font-size:1.5rem;margin:0 0 6px;}
+  .gate-sub{font-size:0.85rem;color:var(--ink);opacity:0.7;margin-bottom:28px;}
+  .field{text-align:left;margin-bottom:16px;}
+  .field label{
+    display:block;font-size:0.68rem;text-transform:uppercase;
+    letter-spacing:0.16em;margin-bottom:6px;color:var(--ink);opacity:0.65;
+  }
+  .field input{
+    width:100%;padding:11px 12px;
+    border:1px solid var(--line);
+    background:var(--white);
+    font-family:'Jost',sans-serif;font-size:0.95rem;color:var(--black);
+    outline:none;
+  }
+  .field input:focus{border-color:var(--beige-deep);}
+  .gate-btn{
+    width:100%;margin-top:8px;
+    background:var(--black);color:var(--white);
+    border:none;padding:13px;
+    font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;
+  }
+  .gate-btn:hover{background:var(--beige-deep);}
+  .gate-error{
+    color:#8a3b2e;font-size:0.78rem;margin-top:12px;min-height:1em;
+  }
+  .gate-hint{
+    margin-top:22px;font-size:0.72rem;color:var(--ink);opacity:0.45;
+  }
+
+  /* ---------- SITE ---------- */
+  #site{opacity:0;transition:opacity 0.8s ease;}
+  #site.show{opacity:1;}
+
+  .divider-amp{
+    text-align:center;font-family:'Cormorant Garamond',serif;
+    font-style:italic;color:var(--beige-deep);
+    font-size:2.4rem;padding:10px 0 0;
+  }
+
+  section{padding:100px 24px;max-width:980px;margin:0 auto;}
+
+  /* HERO */
+  
+  #hero{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:60px 24px;max-width:100%;
+    position:relative;overflow:hidden;
+    background-color:var(--black);
+  }
+  #hero::before{
+    content:'';
+    position:absolute;inset:0;
+    background:url('img/foto-portada.jpg') center/cover no-repeat;
+    z-index:0;
+  }
+  #hero::after{
+    content:'';
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(25,21,16,0.45), rgba(25,21,16,0.72));
+    z-index:1;
+  }
+  #hero > *{position:relative;z-index:2;}
+  #hero .eyebrow{margin-bottom:26px;color:var(--beige);}
+  #hero h1{
+    font-size:clamp(3rem,9vw,6rem);
+    line-height:0.98;margin:0;color:var(--white);
+  }
+  #hero .amp{font-style:italic;color:var(--beige);display:block;font-size:0.5em;margin:6px 0;}
+  #hero .date{
+    margin-top:34px;font-size:1.05rem;letter-spacing:0.1em;
+    color:var(--beige-light);
+  }
+  #hero .scroll-cue{
+    position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+    font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--beige-light);opacity:0.75;z-index:2;
+  }
+  #hero .scroll-cue::after{
+    content:'';display:block;width:1px;height:34px;background:var(--beige);
+    margin:10px auto 0;
+  }
+
+  /* HISTORIA */
+  .section-head{text-align:center;margin-bottom:56px;}
+  .section-head h2{font-size:clamp(2rem,5vw,2.8rem);margin:8px 0 0;}
+
+  .timeline{display:flex;flex-direction:column;gap:0;}
+  .tl-item{
+    display:grid;grid-template-columns:64px 1fr;gap:22px;
+    padding:30px 0;border-top:1px solid var(--line);
+  }
+  .tl-item:last-child{border-bottom:1px solid var(--line);}
+  .tl-num{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--beige-deep);font-style:italic;}
+  .tl-item h3{margin:0 0 8px;font-size:1.35rem;}
+  .tl-item p{margin:0;line-height:1.7;font-size:0.95rem;color:var(--ink);}
+
+  /* GALERIA */
+  .gallery{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  }
+  .gallery figure{
+    margin:0;aspect-ratio:3/4;overflow:hidden;background:var(--beige);
+    position:relative;
+  }
+  .gallery img{width:100%;height:100%;object-fit:cover;display:block;
+    filter:grayscale(15%);transition:filter 0.4s ease, transform 0.6s ease;}
+  .gallery figure:hover img{filter:grayscale(0%);transform:scale(1.04);}
+  .gallery figure:nth-child(2){aspect-ratio:3/5;grid-row:span 2;}
+
+  /* DETALLES */
+  .details-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);
+  }
+  .detail-card{background:var(--beige-light);padding:34px 26px;text-align:center;}
+  .detail-card .eyebrow{margin-bottom:12px;}
+  .detail-card p{margin:0;font-size:1.05rem;color:var(--black);font-family:'Cormorant Garamond',serif;font-size:1.3rem;}
+  .detail-card span{display:block;font-size:0.82rem;color:var(--ink);opacity:0.65;margin-top:6px;font-family:'Jost',sans-serif;}
+   
+  /*MAPA*/
+  .map-wrap{margin-top:40px;text-align:center;}
+.map-frame{
+  border:1px solid var(--line);overflow:hidden;
+}
+.map-frame iframe{
+  display:block;width:100%;height:320px;border:0;
+  filter:grayscale(40%) sepia(6%) contrast(1.05);
+}
+.map-btn{
+  display:inline-block;margin-top:20px;
+  background:var(--black);color:var(--white);text-decoration:none;
+  padding:13px 30px;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;
+  border:1px solid var(--black);transition:background 0.2s ease, border-color 0.2s ease;
+}
+.map-btn:hover{background:var(--beige-deep);border-color:var(--beige-deep);}
+
+  /* REGALO / ALIAS */
+  #regalo{text-align:center;}
+  .alias-card{
+    max-width:420px;margin:0 auto;
+    border:1px solid var(--line);background:var(--white);
+    padding:38px 30px;
+  }
+  .alias-card p.copy{font-size:0.92rem;line-height:1.7;color:var(--ink);margin:0 0 24px;}
+  .alias-box{
+    display:flex;align-items:center;justify-content:space-between;
+    border:1px dashed var(--beige-deep);padding:14px 18px;background:var(--beige-light);
+    margin-bottom:10px;
+  }
+  .alias-box span{font-family:'Cormorant Garamond',serif;font-size:1.25rem;letter-spacing:0.02em;color:var(--black);}
+  .alias-box button{
+    background:none;border:1px solid var(--black);padding:7px 14px;
+    font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;
+    background:var(--black);color:var(--white);
+  }
+  .alias-box button:hover{background:var(--beige-deep);border-color:var(--beige-deep);}
+  .copied-msg{font-size:0.75rem;color:var(--beige-deep);min-height:1em;}
+
+  /* RSVP */
+  #rsvp{text-align:center;}
+  .rsvp-form{
+    max-width:460px;margin:0 auto;text-align:left;
+    background:var(--white);border:1px solid var(--line);padding:40px 34px;
+  }
+  .rsvp-form .field{margin-bottom:18px;}
+  .rsvp-form textarea{
+    width:100%;padding:11px 12px;border:1px solid var(--line);
+    background:var(--white);font-family:'Jost',sans-serif;font-size:0.92rem;
+    resize:vertical;min-height:80px;outline:none;
+  }
+  .rsvp-form textarea:focus{border-color:var(--beige-deep);}
+  .radio-row{display:flex;gap:10px;}
+  .radio-opt{
+    flex:1;border:1px solid var(--line);padding:12px;text-align:center;
+    font-size:0.85rem;letter-spacing:0.03em;transition:all 0.2s ease;
+  }
+  .radio-opt.active{background:var(--black);color:var(--white);border-color:var(--black);}
+  .rsvp-submit{
+    width:100%;background:var(--black);color:var(--white);border:none;
+    padding:14px;font-size:0.8rem;letter-spacing:0.14em;text-transform:uppercase;margin-top:6px;
+  }
+  .rsvp-submit:hover{background:var(--beige-deep);}
+  .rsvp-success{display:none;text-align:center;padding:20px 0;}
+  .rsvp-success.show{display:block;}
+  .rsvp-success .amp{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:2.2rem;color:var(--beige-deep);}
+
+  footer{
+    text-align:center;padding:50px 24px 60px;
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--ink);opacity:0.6;font-size:1rem;
+  }
+    #musicToggle{
+  position:fixed;bottom:24px;right:24px;
+  width:52px;height:52px;border-radius:50%;
+  background:var(--black);border:1px solid var(--beige-deep);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:50;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.6s ease, transform 0.3s ease;
+}
+#musicToggle.show{opacity:1;pointer-events:auto;}
+#musicToggle:hover{transform:scale(1.08);}
+#musicToggle svg{width:19px;height:19px;fill:var(--beige-light);}
+#musicToggle .icon-play{display:block;}
+#musicToggle .icon-pause{display:none;}
+#musicToggle.playing .icon-play{display:none;}
+#musicToggle.playing .icon-pause{display:block;}
+#musicToggle.playing{animation:musicPulse 2.4s ease-in-out infinite;}
+@keyframes musicPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(185,162,109,0.35);}
+  50%{box-shadow:0 0 0 9px rgba(185,162,109,0);}
+}
+  @media (max-width:720px){
+    section{padding:70px 20px;}
+    .gallery{grid-template-columns:repeat(2,1fr);}
+    .gallery figure:nth-child(2){grid-row:span 1;aspect-ratio:3/4;}
+    .details-grid{grid-template-columns:1fr;}
+    .tl-item{grid-template-columns:40px 1fr;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ======= LOGIN ======= -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-amp">&amp;</div>
+    <h1>Bienvenidos</h1>
+    <p class="gate-sub">Ingresá con los datos que te compartimos en la invitación</p>
+    <form id="loginForm">
+      <div class="field">
+        <label for="user">Usuario</label>
+        <input id="user" type="text" autocomplete="on" required>
+      </div>
+      <div class="field">
+        <label for="pass">Contraseña</label>
+        <input id="pass" type="password" autocomplete="on" required>
+      </div>
+      <button type="submit" class="gate-btn">Ingresar</button>
+      <div class="gate-error" id="gateError"></div>
+    </form>
+    <div class="gate-hint">usuario: *** · contraseña: *******</div>
+  </div>
+</div>
+
+<!-- ======= SITIO ======= -->
+<div id="site">
+
+  <section id="hero">
+    <div class="eyebrow">Nos casamos</div>
+    <h1>Rocio<span class="amp">&amp;</span>Jose</h1>
+    <div class="date">08 · 10 · 2026</div>
+    <div class="scroll-cue">Deslizá</div>
+  </section>
+
+  <div class="divider-amp">&amp;</div>
+
+  <section id="historia">
+    <div class="section-head">
+      <div class="eyebrow">Nuestra historia</div>
+      <h2>Cómo llegamos hasta acá</h2>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-num">01</div>
+        <div>
+          <h3>Cómo nos conocimos</h3>
+          <p>Cruzar miradas en un colectivo fue solo el comienzo de algo especial... El tiempo hizo lo suyo y, cuando volvio a cruzarnos en el camino, supimos que era el moento perfecto para empezar a caminar juntos.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">02</div>
+        <div>
+          <h3>Lo que siguió</h3>
+          <p>Trabajamos muy duro. Nos desafiamos mutuamente. Afrontamos los momentos mas dificiles y celebramos los instantes mas hermosos. Comprendimos que para lograrlo, debiamos elegirnos el uno al otro, una y otra vez... En pequeños gestos todos los dias. </p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">03</div>
+        <div>
+          <h3>La propuesta</h3>
+          <p>Fue la certeza de saber que, despues de todo el camino recorrido, queriamos seguir eligiendonos para toda la vida.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider-amp">&amp;</div>
+
+  <section id="galeria">
+    <div class="section-head">
+      <div class="eyebrow">Momentos</div>
+      <h2>Galería</h2>
+    </div>
+    <div class="gallery">
+      <figure><img src="img/imagen1.jpg" alt="Foto 1"></figure>
+      <figure><img src="img/imagen2.jpg" alt="Foto 2"></figure>
+      <figure><img src="img/imagen3.jpg" alt="Foto 3"></figure>
+      <figure><img src="img/imagen4.jpg" alt="Foto 4"></figure>
+    
+    </div>
+  </section>
+
+  <div class="divider-amp">&amp;</div>
+
+  <section id="detalles">
+    <div class="section-head">
+      <div class="eyebrow">Info importante</div>
+      <h2>Detalles</h2>
+    </div>
+    <div class="details-grid">
+      <div class="detail-card">
+        <div class="eyebrow">Fecha</div>
+        <p>08 de octubre </p>
+        <span>2026</span>
+      </div>
+      <div class="detail-card">
+        <div class="eyebrow">Civil</div>
+        <p>12:30:00 hs</p>
+        <span>[Sarmiento 53 - Juzgado de Paz - Tafi Viejo]</span>
+      </div>
+      <div class="detail-card">
+        <div class="eyebrow">Fiesta</div>
+        <p>LULU salon de eventos</p>
+        <span>Hora: 13:30</span>
+      </div>
+    </div>
+        <div class="map-wrap">
+      <div class="map-frame">
+        <iframe
+          src="https://www.google.com/maps?q=-26.7629875,-65.2384267&output=embed"
+          width="100%" height="320" style="border:0;" allowfullscreen=""
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=-26.7629875,-65.2384267" target="_blank" rel="noopener">Cómo llegar al Salòn</a>
+    </div>
+  </section>
+
+  <div class="divider-amp">&amp;</div>
+
+  <section id="regalo">
+    <div class="section-head">
+      <div class="eyebrow">Regalos</div>
+      <h2>Si querés hacernos un regalo</h2>
+    </div>
+    <div class="alias-card">
+      <p class="copy">Tu presencia es el mejor regalo. Si además querés colaborar con nuestra luna de miel, podés hacerlo con este alias:</p>
+      <div class="alias-box">
+        <span id="aliasText">DZAMORA6735.NX.ARS</span>
+        <button id="copyBtn" type="button">Copiar</button>
+      </div>
+      <div class="copied-msg" id="copiedMsg"></div>
+    </div>
+  </section>
+
+  <div class="divider-amp">&amp;</div>
+
+  <section id="rsvp">
+    <div class="section-head">
+      <div class="eyebrow">Te esperamos</div>
+      <h2>Confirmá tu asistencia</h2>
+    </div>
+    <form class="rsvp-form" id="rsvpForm">
+      <div class="field">
+        <label for="rsvpName">Nombre y apellido</label>
+        <input id="rsvpName" type="text" required>
+      </div>
+      <div class="field">
+        <label>¿Vas a poder venir?</label>
+        <div class="radio-row" id="attendRow">
+          <div class="radio-opt active" data-val="si">Sí, voy</div>
+          <div class="radio-opt" data-val="no">No puedo</div>
+        </div>
+      </div>
+      <!--  <div class="field">
+        <label for="rsvpGuests">Cantidad de personas (incluyéndote)</label>
+        <input id="rsvpGuests" type="number" min="1" value="1" required>
+      </div> -->
+      <div class="field">
+        <label for="rsvpMsg">Mensaje para los novios (opcional)</label>
+        <textarea id="rsvpMsg" placeholder="Dedicatoria o lo que quieras contarnos"></textarea>
+      </div>
+      <button type="submit" class="rsvp-submit">Confirmar asistencia</button>
+    </form>
+    <div class="rsvp-success" id="rsvpSuccess">
+      <div class="amp">&amp;</div>
+      <h3>¡Gracias por confirmar!</h3>
+      <p id="rsvpSummary" style="opacity:0.75;font-size:0.9rem;"></p>
+    </div>
+  </section>
+
+  <footer>Rocío &amp; José — 2026</footer>
+
+</div>
+
+<audio id="bgMusic" src="audio/Christina Perri - A Thousand Years (Lyrics)(MP3_160K).mp3" loop preload="auto"></audio>
+<button id="musicToggle" type="button" aria-label="Pausar música">
+  <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+  <svg class="icon-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+</button>
+
+<script>
+  //Credenciales de acceso 
+  const VALID_USER = "RyJ";
+  const VALID_PASS = "casamiento2026";
+  const WHATSAPP_PHONE = 5493813625009;
+  const WHATSAPP_APIKEY = "8897691";
+
+  const gate = document.getElementById('gate');
+  const site = document.getElementById('site');
+  const loginForm = document.getElementById('loginForm');
+  const gateError = document.getElementById('gateError');
+  const bgMusic = document.getElementById('bgMusic');
+  const musicToggle = document.getElementById('musicToggle');
+
+  loginForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    const u = document.getElementById('user').value.trim();
+    const p = document.getElementById('pass').value.trim();
+    if(u === VALID_USER && p === VALID_PASS){
+      gate.classList.add('hidden');
+      site.classList.add('show');
+      musicToggle.classList.add('show');
+      bgMusic.play().then(()=>{
+      musicToggle.classList.add('playing');
+      }).catch(()=>{});
+    } else {
+      gateError.textContent = 'Usuario o contraseña incorrectos.';
+    }
+  });
+   
+  musicToggle.addEventListener('click', function(){
+  if(bgMusic.paused){
+    bgMusic.play();
+    musicToggle.classList.add('playing');
+  } else {
+    bgMusic.pause();
+    musicToggle.classList.remove('playing');
+  }
+
+});
+  //Copiar alias
+  const copyBtn = document.getElementById('copyBtn');
+  const copiedMsg = document.getElementById('copiedMsg');
+  copyBtn.addEventListener('click', async function(){
+    const text = document.getElementById('aliasText').textContent;
+    try{
+      await navigator.clipboard.writeText(text);
+      copiedMsg.textContent = 'Alias copiado ✓';
+    }catch(err){
+      copiedMsg.textContent = text;
+    }
+    setTimeout(()=>{ copiedMsg.textContent=''; }, 2500);
+  });
+
+  // "asistencia" 
+  const attendRow = document.getElementById('attendRow');
+  let attendValue = 'si';
+  attendRow.addEventListener('click', function(e){
+    const opt = e.target.closest('.radio-opt');
+    if(!opt) return;
+    attendRow.querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('active'));
+    opt.classList.add('active');
+    attendValue = opt.dataset.val;
+  });
+
+  // RSVP submit 
+    rsvpForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const name = document.getElementById('rsvpName').value.trim();
+    const msg = document.getElementById('rsvpMsg').value.trim();
+
+    const entry = {
+      name: name,
+      attending: attendValue,
+      message: msg,
+      submittedAt: new Date().toISOString()
+    };
+
+    const key = 'rsvp:' + name.toLowerCase().replace(/\s+/g,'-') + '-' + Date.now();
+
+    try{
+      await window.storage.set(key, JSON.stringify(entry), true);
+    }catch(err){
+      console.error('No se pudo guardar la confirmación', err);
+    }
+
+    try{
+      const resumen = name + ' - ' + (attendValue === 'si' ? 'Viene' : 'No viene') + (msg ? (' - "' + msg + '"') : '');
+      const texto = encodeURIComponent('Nueva confirmación de casamiento: ' + resumen);
+      await fetch('https://api.callmebot.com/whatsapp.php?phone=' + WHATSAPP_PHONE + '&text=' + texto + '&apikey=' + WHATSAPP_APIKEY);
+    }catch(err){
+      console.error('No se pudo enviar el aviso por WhatsApp', err);
+    }
+
+    rsvpForm.style.display = 'none';
+    rsvpSuccess.classList.add('show');
+    rsvpSummary.textContent = attendValue === 'si'
+      ? (name + ', confirmaste tu asistencia. ¡Te esperamos!')
+      : (name + ', lamentamos que no puedas venir. ¡Gracias por avisarnos!');
+  });
+</script>
+
+</body>
+</html>
